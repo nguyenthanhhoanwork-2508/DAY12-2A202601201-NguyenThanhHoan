@@ -43,4 +43,20 @@ jobs:
       - name: Build Docker image
         run: docker build -t day12-agent:${{ github.sha }} .
 
-  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Railway
+        run: npx --yes @railway/cli up --service agent --environment production --project 4b073254-9b3b-49a2-9e71-d29a87ad4bb1 --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Smoke test
+        run: |
+          sleep 45
+          curl -fsS "${{ vars.PUBLIC_URL }}/health"
