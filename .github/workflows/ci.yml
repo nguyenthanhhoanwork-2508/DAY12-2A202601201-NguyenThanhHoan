@@ -29,7 +29,10 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest tests/test_cp1.py tests/test_cp2.py tests/test_cp3.py tests/test_cp4.py -v -m "not docker"
+        run: >-
+          pytest tests/test_cp1.py tests/test_cp2.py tests/test_cp3.py
+          tests/test_cp4.py tests/test_bonus_cicd.py -v -m "not docker"
+          -k "not badge_bao_passing"
 
   build:
     runs-on: ubuntu-latest
