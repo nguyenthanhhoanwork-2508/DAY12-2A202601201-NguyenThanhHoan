@@ -1,0 +1,17 @@
+[project]
+name = "day12-2a202601201-nguyenthanhhoan"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "nguyenthanhhoanwork-2508", email = "nguyenthanhhoan.work@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+day12-2a202601201-nguyenthanhhoan = "day12_2a202601201_nguyenthanhhoan:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
