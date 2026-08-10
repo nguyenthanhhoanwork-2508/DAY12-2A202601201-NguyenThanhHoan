@@ -48,15 +48,15 @@ jobs:
     needs: [test, build]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy to Railway
-        run: npx --yes @railway/cli up --service agent --environment production --project 4b073254-9b3b-49a2-9e71-d29a87ad4bb1 --detach
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Trigger Render deploy
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
 
       - name: Smoke test
         run: |
-          sleep 45
-          curl -fsS "${{ vars.PUBLIC_URL }}/health"
+          for attempt in {1..30}; do
+            if curl -fsS "${{ vars.PUBLIC_URL }}/health"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
